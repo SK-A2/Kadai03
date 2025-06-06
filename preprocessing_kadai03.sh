@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Split Data
-# bzcat $1 | split -l 800000 -d -a 1 --additional-suffix=.json - splitData_
+bzcat $1 | split -l 800000 -d -a 1 --additional-suffix=.json - splitData_
 
 # Parallel + JQ
 parallel -j 4 "jq -c '{refsnp_id:.refsnp_id} + {primary_snapshot_data:.primary_snapshot_data.placements_with_allele[] | select(.is_ptlp==true) | .alleles[] | select(.hgvs|contains(\">\"))}' {} > _{/}" ::: splitData* 
